@@ -1,0 +1,16 @@
+{
+    "name": "UConnect",
+    
+    "private": true,
+    "workspaces": [
+      "client",
+      "server"
+    ],
+
+    "license": "MIT",
+    "repository": "",
+
+    "scripts": {
+        
+    }
+  }
