@@ -7,7 +7,7 @@ export default function ProfileScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={{ color: colors.text, fontSize: 18 }}>Profile Screen</Text>
+      <Text style={{ color: colors.text, fontSize: 24 }}>Profile Screen</Text>
     </View>
   );
 }
