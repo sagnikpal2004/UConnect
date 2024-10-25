@@ -1,13 +1,10 @@
 import * as React from 'react';
 import { StatusBar } from 'react-native';
 import {
-  DarkTheme,
   NavigationContainer,
-  DarkTheme as NavigationDarkTheme,
 } from '@react-navigation/native';
 import {
   Provider as PaperProvider,
-  DarkTheme as PaperDarkTheme,
 } from 'react-native-paper';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -54,13 +51,10 @@ function BottomTabs({ course }) {
         tabBarActiveTintColor: '#BB86FC',
         tabBarInactiveTintColor: 'gray',
         tabBarStyle: { backgroundColor: '#1E1E1E' },
-        headerShown: false, // Hide header in Bottom Tabs
+        headerShown: false,
       })}
     >
-      <Tab.Screen
-        name="Home"
-        // Use children prop to pass 'course' to HomeScreen
-      >
+      <Tab.Screen name="Home">
         {props => <HomeScreen {...props} course={course} />}
       </Tab.Screen>
       <Tab.Screen name="Discover" component={DiscoverScreen} />
@@ -71,22 +65,15 @@ function BottomTabs({ course }) {
 }
 
 export default function App() {
-  // Combine React Navigation and React Native Paper dark themes
-  const CombinedDarkTheme = {
-    ...NavigationDarkTheme,
-    ...DarkTheme,
+const theme = {
     colors: {
-      ...NavigationDarkTheme.colors,
-      ...DarkTheme.colors,
       primary: '#BB86FC',
       accent: '#03DAC6',
       background: '#2c2c2c',
       surface: '#1E1E1E',
       text: 'gray',
-    },
-  };
-
-  const theme = CombinedDarkTheme; // Always use dark theme
+    }
+};
 
   return (
     <PaperProvider theme={theme}>
