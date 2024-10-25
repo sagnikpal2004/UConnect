@@ -1,13 +1,91 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { useTheme } from 'react-native-paper';
+// screens/DiscoverScreen.js
+
+import React, { useState } from 'react';
+import { View, StyleSheet, FlatList, Alert } from 'react-native';
+import { useTheme, Text, TextInput, Button, Card } from 'react-native-paper';
 
 export default function DiscoverScreen() {
   const { colors } = useTheme();
 
+  // Sample data for classes
+  const classesData = [
+    { id: '1', name: 'CS 320' },
+    { id: '2', name: 'CS 311' },
+    { id: '3', name: 'CS 220' },
+    { id: '4', name: 'CS 230' },
+    // Add more classes as needed
+  ];
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredClasses, setFilteredClasses] = useState(classesData);
+
+  // Handle search input changes
+  const onChangeSearch = (query) => {
+    setSearchQuery(query);
+    if (query === '') {
+      setFilteredClasses(classesData);
+    } else {
+      const filtered = classesData.filter((cls) =>
+        cls.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredClasses(filtered);
+    }
+  };
+
+  // Handle Join button press
+  const handleJoin = (className) => {
+    Alert.alert('Joined', `You have joined ${className}!`);
+    // Implement actual join functionality here
+  };
+
+  // Render each class item
+  const renderClassItem = ({ item }) => (
+    <Card style={[styles.card, { backgroundColor: colors.surface }]}>
+      <Card.Title title={item.name} titleStyle={{ color: colors.text }} />
+      <Card.Actions>
+        <Button
+          mode="contained"
+          onPress={() => handleJoin(item.name)}
+          style={{ backgroundColor: colors.primary }}
+        >
+          Join
+        </Button>
+      </Card.Actions>
+    </Card>
+  );
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={{ color: colors.text, fontSize: 18 }}>Discover Screen</Text>
+      <TextInput //Search bar
+        placeholder="Search for classes..."
+        value={searchQuery}
+        onChangeText={onChangeSearch}
+        mode="outlined"
+        style={styles.searchBar}
+        placeholderTextColor="gray"
+        theme={{
+          colors: {
+            primary: colors.primary,
+            background: colors.background,
+            text: 'gray',
+            placeholder: 'gray',
+            surface: colors.surface,
+          },
+        }}
+      />
+
+      {/* Classes List */}
+      <FlatList
+        data={filteredClasses}
+        keyExtractor={(item) => item.id}
+        renderItem={renderClassItem}
+        contentContainerStyle={styles.list}
+        ListEmptyComponent={
+          <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>
+            No classes found.
+          </Text>
+        }
+      />
     </View>
   );
 }
@@ -15,7 +93,16 @@ export default function DiscoverScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 16,
+  },
+  searchBar: {
+    marginBottom: 16,
+    borderColor: '#BB86FC', // Optional: customize border color
+  },
+  list: {
+    paddingBottom: 16,
+  },
+  card: {
+    marginBottom: 12,
   },
 });
