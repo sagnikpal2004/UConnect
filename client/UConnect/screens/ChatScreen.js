@@ -7,7 +7,7 @@ export default function ChatScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={{ color: colors.text, fontSize: 18 }}>Chat Screen</Text>
+      <Text style={{ color: colors.text, fontSize: 24 }}>Chat Screen</Text>
     </View>
   );
 }
