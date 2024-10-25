@@ -7,13 +7,11 @@ import { useTheme, Text, TextInput, Button, Card } from 'react-native-paper';
 export default function DiscoverScreen() {
   const { colors } = useTheme();
 
-  // Sample data for classes
   const classesData = [
     { id: '1', name: 'CS 320' },
     { id: '2', name: 'CS 311' },
     { id: '3', name: 'CS 220' },
     { id: '4', name: 'CS 230' },
-    // Add more classes as needed
   ];
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -74,7 +72,6 @@ export default function DiscoverScreen() {
         }}
       />
 
-      {/* Classes List */}
       <FlatList
         data={filteredClasses}
         keyExtractor={(item) => item.id}
@@ -97,7 +94,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     marginBottom: 16,
-    borderColor: '#BB86FC', // Optional: customize border color
+    borderColor: '#BB86FC',
   },
   list: {
     paddingBottom: 16,
