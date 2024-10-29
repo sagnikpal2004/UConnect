@@ -1,83 +1,125 @@
-// screens/DiscoverScreen.js
-
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Alert } from 'react-native';
-import { useTheme, Text, TextInput, Button, Card } from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Alert,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
+import {
+  useTheme,
+  Text,
+  TextInput,
+  Button,
+  Card,
+} from 'react-native-paper';
+import { fetchClassCommunity } from '../services/courses.js';
 
 export default function DiscoverScreen() {
   const { colors } = useTheme();
 
-  // Sample data for classes
-  const classesData = [
-    { id: '1', name: 'CS 320' },
-    { id: '2', name: 'CS 311' },
-    { id: '3', name: 'CS 220' },
-    { id: '4', name: 'CS 230' },
-    // Add more classes as needed
-  ];
-
+  const [classesData, setClassesData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredClasses, setFilteredClasses] = useState(classesData);
+  const [filteredClasses, setFilteredClasses] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [joiningClassId, setJoiningClassId] = useState(null);
 
-  // Handle search input changes
+  useEffect(() => {
+    loadClasses();
+  }, []);
+
+  const loadClasses = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchClassCommunity();
+      console.log("Fetched Classes Data:", data); // For debugging
+      setClassesData(data);
+      setFilteredClasses(data);
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+      Alert.alert('Error', `Failed to load classes. ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onChangeSearch = (query) => {
     setSearchQuery(query);
-    if (query === '') {
+    if (query.trim() === '') {
       setFilteredClasses(classesData);
     } else {
+      const lowerCaseQuery = query.toLowerCase();
       const filtered = classesData.filter((cls) =>
-        cls.name.toLowerCase().includes(query.toLowerCase())
+        (cls.course_subject || '').toLowerCase().includes(lowerCaseQuery)
       );
       setFilteredClasses(filtered);
     }
   };
 
-  // Handle Join button press
-  const handleJoin = (className) => {
-    Alert.alert('Joined', `You have joined ${className}!`);
-    // Implement actual join functionality here
+  const handleJoin = async (classId, className) => {
+    Alert.alert('Success', `You have joined ${className}!`);
   };
 
-  // Render each class item
+
   const renderClassItem = ({ item }) => (
     <Card style={[styles.card, { backgroundColor: colors.surface }]}>
-      <Card.Title title={item.name} titleStyle={{ color: colors.text }} />
+      <Card.Title 
+        title={`${item.course_subject} ${item.course_number}`} 
+        titleStyle={{ color: colors.text }} 
+      />
+      {item.description ? (
+        <Card.Content>
+          <Text style={{ color: colors.text }}>{item.description}</Text>
+        </Card.Content>
+      ) : null}
       <Card.Actions>
         <Button
           mode="contained"
-          onPress={() => handleJoin(item.name)}
+          onPress={() => handleJoin(item.id, `${item.course_subject} ${item.course_number}`)}
           style={{ backgroundColor: colors.primary }}
+          disabled={joiningClassId === item.id}
         >
-          Join
+          {joiningClassId === item.id ? (
+            <ActivityIndicator color="#fff" size="small" />
+          ) : (
+            'Join'
+          )}
         </Button>
       </Card.Actions>
     </Card>
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <TextInput //Search bar
-        placeholder="Search for classes..."
-        value={searchQuery}
-        onChangeText={onChangeSearch}
-        mode="outlined"
-        style={styles.searchBar}
-        placeholderTextColor="gray"
-        theme={{
-          colors: {
-            primary: colors.primary,
-            background: colors.background,
-            text: 'gray',
-            placeholder: 'gray',
-            surface: colors.surface,
-          },
-        }}
-      />
-
-      {/* Classes List */}
+  <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    style={{ flex: 1 }}
+  >
+  <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <TextInput
+      placeholder="Search for classes..."
+      value={searchQuery}
+      onChangeText={onChangeSearch}
+      mode="outlined"
+      style={styles.searchBar}
+      placeholderTextColor="#FFFFFF"
+      theme={{
+        colors: {
+          primary: colors.primary,
+          background: colors.background,
+          text: '#FFFFFF',
+          placeholder: '#FFFFFF',
+          surface: colors.surface,
+        },
+      }}
+    />
+    {loading ? (
+      <ActivityIndicator size="large" color={colors.primary} style={{ marginTop: 20 }} />
+    ) : 
       <FlatList
         data={filteredClasses}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={renderClassItem}
         contentContainerStyle={styles.list}
         ListEmptyComponent={
@@ -86,7 +128,10 @@ export default function DiscoverScreen() {
           </Text>
         }
       />
-    </View>
+    }
+  </View>
+</KeyboardAvoidingView>
+
   );
 }
 
@@ -97,12 +142,15 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     marginBottom: 16,
-    borderColor: '#BB86FC', // Optional: customize border color
+    borderColor: '#BB86FC',
   },
   list: {
     paddingBottom: 16,
   },
   card: {
+    marginBottom: 12,
+  },
+  input: {
     marginBottom: 12,
   },
 });
