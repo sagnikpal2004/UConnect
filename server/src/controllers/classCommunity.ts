@@ -4,9 +4,8 @@ import pool from '../database/postgres';
 // Controller to get all class community names
 export const getClassCommunity = async (req: Request, res: Response) => {
     try {
-        const result = await pool.query("SELECT course_subject FROM courses");
-        const classCommunities = result.rows.map(row => row.course_subject);
-        res.status(200).json(classCommunities);
+        const result = await pool.query("SELECT * FROM courses");
+        res.status(200).json(result.rows);
     } catch (error) {
         console.error(error);
         res.sendStatus(500);
