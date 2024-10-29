@@ -19,12 +19,12 @@ import ChatScreen from './screens/ChatScreen';
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
-// Bottom Tabs Navigator Component
+// Bottom nav
 function BottomTabs({ course }) {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        // Configure the tab bar icon based on the route name
+        // Configure the tab bar icon based on route name
         tabBarIcon: ({ color, size }) => {
           let iconName;
 

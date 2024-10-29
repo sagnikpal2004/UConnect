@@ -33,10 +33,10 @@ export default function DiscoverScreen() {
   // Handle Join button press
   const handleJoin = (className) => {
     Alert.alert('Joined', `You have joined ${className}!`);
-    // Implement actual join functionality here
+    // actual join functionality here
   };
 
-  // Render each class item
+  // Render each class card
   const renderClassItem = ({ item }) => (
     <Card style={[styles.card, { backgroundColor: colors.surface }]}>
       <Card.Title title={item.name} titleStyle={{ color: colors.text }} />
