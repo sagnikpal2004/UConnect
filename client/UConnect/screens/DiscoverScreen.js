@@ -1,23 +1,35 @@
-// screens/DiscoverScreen.js
-
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, FlatList, Alert, ActivityIndicator } from 'react-native';
 import { useTheme, Text, TextInput, Button, Card } from 'react-native-paper';
+import { fetchClassCommunity, createClassCommunity } from '../services/courses.js'; // Adjust the path as needed
 
 export default function DiscoverScreen() {
   const { colors } = useTheme();
 
-  const classesData = [
-    { id: '1', name: 'CS 320' },
-    { id: '2', name: 'CS 311' },
-    { id: '3', name: 'CS 220' },
-    { id: '4', name: 'CS 230' },
-  ];
-
+  const [classesData, setClassesData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredClasses, setFilteredClasses] = useState(classesData);
+  const [filteredClasses, setFilteredClasses] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [joiningClassId, setJoiningClassId] = useState(null);
 
-  // Handle search input changes
+  useEffect(() => {
+    loadClasses();
+  }, []);
+
+  const loadClasses = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchClassCommunity();
+      setClassesData(data);
+      setFilteredClasses(data);
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+      Alert.alert('Error', `Failed to load classes. ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onChangeSearch = (query) => {
     setSearchQuery(query);
     if (query === '') {
@@ -30,23 +42,34 @@ export default function DiscoverScreen() {
     }
   };
 
-  // Handle Join button press
-  const handleJoin = (className) => {
-    Alert.alert('Joined', `You have joined ${className}!`);
-    // actual join functionality here
+  const handleJoin = async (classId, className) => {
+    setJoiningClassId(classId);
+    try {
+      const response = await createClassCommunity({ classId, className });
+      Alert.alert('Success', `You have joined ${className}!`);
+      // Optionally, refresh the class list or update UI
+    } catch (error) {
+      Alert.alert('Error', 'Failed to join the class.');
+    } finally {
+      setJoiningClassId(null);
+    }
   };
 
-  // Render each class card
   const renderClassItem = ({ item }) => (
     <Card style={[styles.card, { backgroundColor: colors.surface }]}>
       <Card.Title title={item.name} titleStyle={{ color: colors.text }} />
       <Card.Actions>
         <Button
           mode="contained"
-          onPress={() => handleJoin(item.name)}
+          onPress={() => handleJoin(item.id, item.name)}
           style={{ backgroundColor: colors.primary }}
+          disabled={joiningClassId === item.id}
         >
-          Join
+          {joiningClassId === item.id ? (
+            <ActivityIndicator color="#fff" size="small" />
+          ) : (
+            'Join'
+          )}
         </Button>
       </Card.Actions>
     </Card>
@@ -54,35 +77,42 @@ export default function DiscoverScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <TextInput //Search bar
+      {/* Search Bar */}
+      <TextInput
         placeholder="Search for classes..."
         value={searchQuery}
         onChangeText={onChangeSearch}
         mode="outlined"
         style={styles.searchBar}
-        placeholderTextColor="gray"
+        placeholderTextColor="#FFFFFF"
         theme={{
           colors: {
             primary: colors.primary,
             background: colors.background,
-            text: 'gray',
-            placeholder: 'gray',
+            text: '#FFFFFF',
+            placeholder: '#FFFFFF',
             surface: colors.surface,
           },
         }}
       />
 
-      <FlatList
-        data={filteredClasses}
-        keyExtractor={(item) => item.id}
-        renderItem={renderClassItem}
-        contentContainerStyle={styles.list}
-        ListEmptyComponent={
-          <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>
-            No classes found.
-          </Text>
-        }
-      />
+      {/* Loading Indicator */}
+      {loading ? (
+        <ActivityIndicator size="large" color={colors.primary} style={{ marginTop: 20 }} />
+      ) : (
+        /* Classes List */
+        <FlatList
+          data={filteredClasses}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderClassItem}
+          contentContainerStyle={styles.list}
+          ListEmptyComponent={
+            <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>
+              No classes found.
+            </Text>
+          }
+        />
+      )}
     </View>
   );
 }
@@ -103,3 +133,4 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 });
+
