@@ -1,4 +1,4 @@
-const url = "http://172.31.143.218:3000/classCommunity"; 
+const url = "http://103.211.23.35:3001/classCommunity"; 
 
 export const fetchClassCommunity = async () => {
     try {
