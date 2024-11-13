@@ -1,5 +1,8 @@
 # UConnect Backend
 
+## Web Service
+https://uconnect-backend.onrender.com
+
 ## API Documentation
 
 ### GET "/"
@@ -8,12 +11,13 @@
 - **Response**:
   - **Status**: 200 OK
 
-### POST "/register"
+### POST "/auth/register"
 - **Method**: POST
 - **Description**: Registers a new user and returns a JWT token.
 - **Request Body**:
-  - **Content-Type**: application/json
+  - **Headers**: None
   - **Body**:
+    application/json
     ```json
     {
       "name": "string",
@@ -29,50 +33,28 @@
       "token": "string"
     }
     ```
-- **Example**:
-  - **Request**:
-    ```sh
-    curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"name":"John Doe","email":"john.doe@example.com","password":"password123"}'
-    ```
-  - **Response**:
-    ```json
-    {
-      "token": "your_jwt_token"
-    }
-    ```
 
-### POST "/login"
+### POST "/auth/login"
 - **Method**: POST
 - **Description**: Authenticates a user and returns a JWT token.
-- **Request Body**:
-  - **Content-Type**: application/json
+- **Request**
+  - **Headers**: None
   - **Body**:
-    ```json
-    {
-      "email": "string",
-      "password": "string"
-    }
-    ```
+  application/json
+  ```json
+  {
+    "email": "string",
+    "password": "string"
+  }
+  ```
 - **Response**:
-  - **Status**: 200 OK
+  - **Status**: 
+    - 200 OK
+    - 401 Unauthorized
+    - 404 Not Found
   - **Body**:
     ```json
     {
       "token": "string"
-    }
-    ```
-  - **Status**: 404 Not Found
-    - **Description**: User not found
-  - **Status**: 401 Unauthorized
-    - **Description**: Invalid password
-- **Example**:
-  - **Request**:
-    ```sh
-    curl -X POST http://localhost:3000/login -H "Content-Type: application/json" -d '{"email":"john.doe@example.com","password":"password123"}'
-    ```
-  - **Response**:
-    ```json
-    {
-      "token": "your_jwt_token"
     }
     ```
