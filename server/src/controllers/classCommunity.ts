@@ -14,12 +14,12 @@ export const getClassCommunity = async (req: Request, res: Response) => {
 
 // Controller to create a new class community
 export const createClassCommunity = async (req: Request, res: Response) => {
-    const { course_subject, course_number, users } = req.body;
+    const { course_subject, course_name, users } = req.body;
 
     try {
         const result = await pool.query(
-            "INSERT INTO courses (course_subject, course_number, users) VALUES ($1, $2, $3) RETURNING id",
-            [course_subject, course_number, users]
+            "INSERT INTO courses (course_subject, course_name, users) VALUES ($1, $2, $3) RETURNING id",
+            [course_subject, course_name, users]
         );
         res.status(201).json({ id: result.rows[0].id });
     } catch (error) {
