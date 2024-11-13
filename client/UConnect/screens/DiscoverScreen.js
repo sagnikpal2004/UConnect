@@ -98,7 +98,7 @@ export default function DiscoverScreen() {
         course_subject: NewClassSubject,
       };
       const createdClass = await createClassCommunity(newClass);
-      Alert.alert('Success', `Class "${createdClass.course_name}" created successfully!`);
+      Alert.alert('Success', `Class "${newClassName}" created successfully!`);
       // Refresh the class list to include the new class
       loadClasses();
       // Reset form fields
