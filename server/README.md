@@ -20,7 +20,7 @@ https://uconnect-backend.onrender.com
     application/json
     ```json
     {
-      "name": "string",
+      "username": "string",
       "email": "string",
       "password": "string"
     }
