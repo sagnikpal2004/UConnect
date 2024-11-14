@@ -1,4 +1,4 @@
-const url = "https://uconnect-backend.onrender.com:443/classCommunity"; 
+const url = "https://uconnect-backend.onrender.com:443/classCommunity";
 
 export const fetchClassCommunity = async () => {
     try {
@@ -20,6 +20,27 @@ export const fetchClassCommunity = async () => {
         throw error;
     }
 };
+
+export const fetchClassCommunityById = async (classId) => {
+    try {
+        const response = await fetch(`${url}/${classId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error("Failed to fetch class community data");
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
 
 export const createClassCommunity = async (classData) => {
     try {

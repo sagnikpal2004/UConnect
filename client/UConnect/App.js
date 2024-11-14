@@ -16,6 +16,10 @@ import ProfileScreen from './screens/ProfileScreen';
 import DiscoverScreen from './screens/DiscoverScreen';
 import ChatScreen from './screens/ChatScreen';
 
+// Import services
+import { fetchClassCommunityById } from './services/courses.js';
+import { fetchJoinedClasses } from './services/user2.js';
+
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -75,6 +79,19 @@ const theme = {
     }
 };
 
+  const [classNames, setClassNames] = React.useState([]);
+  React.useEffect(() => {(async () => {
+    try {
+      const classIds = await fetchJoinedClasses();
+      const classData = await Promise.all(classIds.map(async id => await fetchClassCommunityById(id)));
+      setClassNames(classData.map(data => `${data.course_subject} ${data.course_name}`));
+    } catch (error) {
+      console.error(error);
+    }
+  })()}, [])
+
+  console.log("HAHAHAH", classNames);
+
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer theme={theme}>
@@ -99,32 +116,20 @@ const theme = {
           })}
         >
           <Drawer.Screen
-            name="Class 1"
+            name="Home"
             options={{ headerTitle: 'UConnect' }}
           >
             {props => <BottomTabs {...props} course="Class 1" />}
           </Drawer.Screen>
-
-          <Drawer.Screen
-            name="Class 2"
-            options={{ headerTitle: 'UConnect' }}
-          >
-            {props => <BottomTabs {...props} course="Class 2" />}
-          </Drawer.Screen>
-
-          <Drawer.Screen
-            name="Class 3"
-            options={{ headerTitle: 'UConnect' }}
-          >
-            {props => <BottomTabs {...props} course="Class 3" />}
-          </Drawer.Screen>
-
-          <Drawer.Screen
-            name="Class 4"
-            options={{ headerTitle: 'UConnect' }}
-          >
-            {props => <BottomTabs {...props} course="Class 4" />}
-          </Drawer.Screen>
+          {classNames.map((className, index) => (
+            <Drawer.Screen
+              key={index}
+              name={className}
+              options={{ headerTitle: 'UConnect' }}
+            >
+              {props => <BottomTabs {...props} course={className} />}
+            </Drawer.Screen>
+          ))}
         </Drawer.Navigator>
       </NavigationContainer>
     </PaperProvider>
