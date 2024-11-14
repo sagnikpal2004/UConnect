@@ -1,7 +1,18 @@
-// Connect a user with a class
-// GET classList
-// POST newClass
-// DELETE class
+import express from "express";
+import {
+    connectUserWithClass,
+    getClassList,
+    createNewClass,
+    deleteClass
+} from "../controllers/user";
 
-// release notes - appetize
-// source distribution - just the github
+
+const router = express.Router();
+
+router.post("/connect", connectUserWithClass);
+router.get("/classList", getClassList);
+router.post("/newClass", createNewClass);
+router.delete("/class", deleteClass);
+
+
+export default router;
