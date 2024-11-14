@@ -12,6 +12,18 @@ export const getClassCommunity = async (req: Request, res: Response) => {
     }
 };
 
+export const getClassCommunityById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+        const result = await pool.query("SELECT * FROM courses WHERE id = $1", [id]);
+        res.status(200).json(result.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
+}
+
 // Controller to create a new class community
 export const createClassCommunity = async (req: Request, res: Response) => {
     const { course_subject, course_name, users } = req.body;
