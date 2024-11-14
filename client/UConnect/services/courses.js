@@ -1,4 +1,4 @@
-const url = "http://localhost:3000/classCommunity"; 
+const url = "https://uconnect-backend.onrender.com:443/classCommunity"; 
 
 export const fetchClassCommunity = async () => {
     try {
