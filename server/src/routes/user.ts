@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 router.post("/connect", connectUserWithClass);
-router.get("/classList", getClassList);
+router.get("/classList/:userId", getClassList);
 router.post("/newClass", createNewClass);
 router.delete("/class", deleteClass);
 

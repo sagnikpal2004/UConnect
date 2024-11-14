@@ -25,7 +25,7 @@ export const getClassList = async (req: Request, res: Response) => {
             [userId]
         );
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: "User not found" });
+            res.status(404).json({ message: "User not found" });
         }
         res.status(200).json(result.rows[0].course_list);
     } catch (error) {
