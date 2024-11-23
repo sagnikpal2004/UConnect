@@ -103,7 +103,7 @@ https://uconnect-backend.onrender.com
       "users": list[int]
     ```
 
-### POST "/courses/create"
+### POST "/courses"
 - **Description**: Creates a new course.
 - **Request**:
   - **Headers**:

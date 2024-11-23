@@ -14,7 +14,7 @@ router.use(authenticateToken);
 
 router.get("/", getCourses);
 router.get("/:id", getCourseById);
-router.post("/create", createCourse);
+router.post("/", createCourse);
 router.put("/:id", updateCourse);
 router.delete("/:id", deleteCourse);
 
