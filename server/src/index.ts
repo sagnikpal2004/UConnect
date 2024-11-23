@@ -9,11 +9,11 @@ app.get("/", (_, res) => {
 });
 
 import authRouter from "./routes/auth";
-import classCommunityRouter from "./routes/classCommunity";
+import coursesRouter from "./routes/courses";
 import userRouter from "./routes/user";
 
 app.use("/auth", authRouter);
-app.use("/classCommunity", classCommunityRouter);
+app.use("/courses", coursesRouter);
 app.use("/user", userRouter);
 
 app.listen(3000);
