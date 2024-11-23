@@ -108,6 +108,8 @@ https://uconnect-backend.onrender.com
 - **Request**:
   - **Headers**:
     - Authorization: Bearer "JWTToken"
+  - **Query Params**:
+    - `?autojoin`: boolean
   - **Body**:
     application/json
     ```json
@@ -160,4 +162,38 @@ https://uconnect-backend.onrender.com
   - **Body**:
     ```json
       "message": "Course deleted successfully"
+    ```
+
+### POST "/courses/:id/join"
+- **Description**: Adds the user to the course.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Params**:
+    - id: int
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 400 Bad Request
+    - 404 Not Found
+  - **Body**:
+    ```json
+      "message": "User joined course successfully"
+    ```
+
+### POST "/courses/:id/leave"
+- **Description**: Removes the user from the course.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Params**:
+    - id: int
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 400 Bad Request
+    - 404 Not Found
+  - **Body**:
+    ```json
+      "message": "User left course successfully"
     ```
