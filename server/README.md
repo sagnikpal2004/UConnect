@@ -6,13 +6,33 @@ https://uconnect-backend.onrender.com
 ## API Documentation
 
 ### GET "/"
-- **Method**: GET
 - **Description**: Server running
 - **Response**:
   - **Status**: 200 OK
 
+### GET "/auth"
+- **Description**: Returns the user's information.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer <JWTToken~>
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 401 Unauthorized
+  - **Body**:
+    ```json
+    "id": int,
+    "email": string,
+    "username": string,
+    "password_hash": string,
+    "points": int,
+    "course_list": list[int],
+    "created_at": timestamp,
+    "updated_at": timestamp
+    ```
+
+
 ### POST "/auth/register"
-- **Method**: POST
 - **Description**: Registers a new user and returns a JWT token.
 - **Request Body**:
   - **Headers**: None
@@ -35,7 +55,6 @@ https://uconnect-backend.onrender.com
     ```
 
 ### POST "/auth/login"
-- **Method**: POST
 - **Description**: Authenticates a user and returns a JWT token.
 - **Request**
   - **Headers**: None
