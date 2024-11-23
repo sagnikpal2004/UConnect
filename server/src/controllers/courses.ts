@@ -56,7 +56,7 @@ export const updateCourse = async (req: Request, res: Response) => {
         );
 
         if (result.rowCount === 0)
-            return res.status(404).json({ message: 'Course not found' });
+            return res.sendStatus(404);
 
         res.status(200).json(result.rows[0]);
     } catch (error) {
@@ -71,7 +71,7 @@ export const deleteCourse = async (req: Request, res: Response) => {
         const result = await pool.query('DELETE FROM courses WHERE id = $1 RETURNING *', [id]);
 
         if (result.rowCount === 0)
-            return res.status(404).json({ message: 'Course not found' });
+            return res.sendStatus(404);
 
         res.status(200).json({ message: 'Course deleted successfully' });
     } catch (error) {
