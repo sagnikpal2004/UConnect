@@ -6,8 +6,11 @@ import {
     getCourseById,
     updateCourse,
 } from "../controllers/courses";
+import authenticateToken from "../middleware/auth";
 
 const router = express.Router();
+
+router.use(authenticateToken);
 
 router.get("/", getCourses);
 router.get("/:id", getCourseById);
