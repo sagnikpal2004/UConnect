@@ -31,3 +31,7 @@ export const login = async (req: Request, res: Response) => {
     const token = jwt.sign({ id: result.rows[0].id }, JWT_SECRET);
     res.status(200).json({ token });
 }
+
+export const getUserProfile = async (req: Request, res: Response) => {
+    return res.status(200).json(req.body.user);
+}
