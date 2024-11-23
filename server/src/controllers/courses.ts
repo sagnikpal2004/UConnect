@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import pool from '../database/postgres';
 
 // Controller to get all class community names
-export const getClassCommunity = async (req: Request, res: Response) => {
+export const getCourses = async (req: Request, res: Response) => {
     try {
         const result = await pool.query("SELECT * FROM courses");
         res.status(200).json(result.rows);
@@ -12,7 +12,7 @@ export const getClassCommunity = async (req: Request, res: Response) => {
     }
 };
 
-export const getClassCommunityById = async (req: Request, res: Response) => {
+export const getCourseById = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
@@ -25,7 +25,7 @@ export const getClassCommunityById = async (req: Request, res: Response) => {
 }
 
 // Controller to create a new class community
-export const createClassCommunity = async (req: Request, res: Response) => {
+export const createCourse = async (req: Request, res: Response) => {
     const { course_subject, course_name, users } = req.body;
 
     try {
@@ -39,3 +39,11 @@ export const createClassCommunity = async (req: Request, res: Response) => {
         res.sendStatus(500);
     }
 };
+
+export const updateCourse = async (req: Request, res: Response) => {
+    res.sendStatus(501);
+}
+
+export const deleteCourse = async (req: Request, res: Response) => {
+    res.sendStatus(501);
+}
