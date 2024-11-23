@@ -10,11 +10,9 @@ app.get("/", (_, res) => {
 
 import authRouter from "./routes/auth";
 import coursesRouter from "./routes/courses";
-import userRouter from "./routes/user";
 
 app.use("/auth", authRouter);
 app.use("/courses", coursesRouter);
-app.use("/user", userRouter);
 
 app.listen(3000);
 
