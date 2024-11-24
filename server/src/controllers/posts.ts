@@ -19,7 +19,6 @@ export const getPostById = async (req: Request, res: Response) => {
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
-    res.sendStatus(501);
 }
 
 export const createPost = async (req: Request, res: Response) => {
@@ -37,13 +36,14 @@ export const createPost = async (req: Request, res: Response) => {
         if (parentpost_id) {
             const result1 = await pool.query("SELECT * FROM posts WHERE id = $1", [parentpost_id]);
             if (result1.rowCount == 0)
-                return res.status(400).json({ message: 'parent_post_id does not exist' });
+                return res.status(400).json({ message: 'parentpost_id does not exist' });
         }
 
         const result = await pool.query(
-            "INSERT INTO posts (sender_id, content, course_id, parentpost_id) VALUES ($1, $2, $3) RETURNING id",
+            "INSERT INTO posts (sender_id, content, course_id, parentpost_id) VALUES ($1, $2, $3, $4) RETURNING id",
             [req.body.user.id, content, course_id, parentpost_id ?? 0]
         )
+        res.status(201).json({id: result.rows[0].id});
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
@@ -75,7 +75,7 @@ export const upvotePost = async (req: Request, res: Response) => {
 
     try {
         const result = await pool.query(
-            'UPDATE posts SET upvotes = upvotes + 1 WHERE id = $1 RETURNING *',
+            'UPDATE posts SET votes = votes + 1 WHERE id = $1 RETURNING *',
             [id]
         );
 
@@ -93,7 +93,7 @@ export const downvotePost = async (req: Request, res: Response) => {
 
     try {
         const result = await pool.query(
-            'UPDATE posts SET downvotes = downvotes + 1 WHERE id = $1 RETURNING *',
+            'UPDATE posts SET votes = votes - 1 WHERE id = $1 RETURNING *',
             [id]
         );
 

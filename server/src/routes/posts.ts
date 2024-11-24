@@ -20,8 +20,8 @@ router.get("/:id", getPostById);
 router.post("/", createPost);
 
 router.put("/:id", updatePost);
-router.put("/:id/upvote", upvotePost);
-router.put("/:id/downvote", downvotePost);
+router.post("/:id/upvote", upvotePost);
+router.post("/:id/downvote", downvotePost);
 
 router.delete(":/id", deletePost);
 
