@@ -1,14 +1,17 @@
-const url = "http://uconnect-backend.onrender.com:80/user"; 
-// CHANGE TO USE jwttoken INSTEAD of USER_ID
+const url = "https://uconnect-backend.onrender.com:443/courses"; 
+const base_url = "https://uconnect-backend.onrender.com:443";
 
-export const joinClassCommunity = async (courseId, userId=1) => {
+export const joinClassCommunity = async (courseId) => {
     try {
-        const response = await fetch(`${url}/connect`, {
-            method: "POST",
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzMyMzg4OTUwfQ.uAQYZdZLmskRvV42C_Dv3ty509T5edV4FQUXpTB_EWk"    // TODO: Replace this with token from AsyncStorage
+        // const token = await AsyncStorage.getItem('token');
+        // if (!token)
+        //     throw new Error("No token found");
+
+        const response = await fetch(`${url}/${courseId}/join`, {
             headers: {
-                "Content-Type": "application/json"
+                "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({ userId, courseId })
         });
         if (!response.ok)
             throw new Error("Failed to join class community");
@@ -20,16 +23,21 @@ export const joinClassCommunity = async (courseId, userId=1) => {
     }
 }
 
-export const fetchJoinedClasses = async (userId=1) => {
+export const fetchJoinedClasses = async () => {
     try {
-        const response = await fetch(`${url}/classList/${userId}`, {
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzMyMzg4OTUwfQ.uAQYZdZLmskRvV42C_Dv3ty509T5edV4FQUXpTB_EWk"    // TODO: Replace this with token from AsyncStorage
+        // const token = await AsyncStorage.getItem('token');
+        // if (!token)
+        //     throw new Error("No token found");
+
+        const response = await fetch(`${base_url}/auth/`, {
             method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Authorization": `Bearer ${token}`
             }
         });
 
-        return await response.json();
+        return (await response.json()).course_list;
     } catch (error) {
         console.error("Error fetching joined classes:", error);
         throw error;
