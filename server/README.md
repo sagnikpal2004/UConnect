@@ -6,46 +6,59 @@ https://uconnect-backend.onrender.com
 ## API Documentation
 
 ### GET "/"
-- **Method**: GET
 - **Description**: Server running
 - **Response**:
   - **Status**: 200 OK
 
+### GET "/auth"
+- **Description**: Returns the user's information.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 401 Unauthorized
+  - **Body**:
+    ```json
+    "id": int,
+    "email": string,
+    "username": string,
+    "password_hash": string,
+    "points": int,
+    "course_list": list[int],
+    "created_at": timestamp,
+    "updated_at": timestamp
+    ```
+
+
 ### POST "/auth/register"
-- **Method**: POST
 - **Description**: Registers a new user and returns a JWT token.
 - **Request Body**:
   - **Headers**: None
   - **Body**:
     application/json
     ```json
-    {
-      "name": "string",
+      "username": "string",
       "email": "string",
       "password": "string"
-    }
     ```
 - **Response**:
   - **Status**: 201 Created
   - **Body**:
     ```json
-    {
       "token": "string"
-    }
     ```
 
 ### POST "/auth/login"
-- **Method**: POST
 - **Description**: Authenticates a user and returns a JWT token.
 - **Request**
   - **Headers**: None
   - **Body**:
   application/json
   ```json
-  {
     "email": "string",
     "password": "string"
-  }
   ```
 - **Response**:
   - **Status**: 
@@ -54,7 +67,300 @@ https://uconnect-backend.onrender.com
     - 404 Not Found
   - **Body**:
     ```json
-    {
       "token": "string"
+    ```
+
+### GET "/courses"
+- **Description**: Returns a list of all courses.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+- **Response**:
+  - **Status**:
+    - 200 OK
+  - **Body**:
+    ```json
+      "id": int,
+      "course_subject": string,
+      "course_name": string,
+      "users": list[int]
+    ```
+
+### GET "/courses/:id"
+- **Description**: Returns the details of a specific course by ID.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 404 Not Found
+  - **Body**:
+    ```json
+      "id": int,
+      "course_subject": string,
+      "course_name": string,
+      "users": list[int]
+    ```
+
+### POST "/courses"
+- **Description**: Creates a new course.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Query Params**:
+    - `?autojoin`: boolean
+  - **Body**:
+    application/json
+    ```json
+      "course_subject": "string",
+      "course_name": "string"
+    ```
+- **Response**:
+  - **Status**: 201 Created
+  - **Body**:
+    ```json
+      "id": int
+    ```
+
+### PUT "/courses/:id"
+- **Description**: Updates an existing course by ID.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Params**:
+    - id: int
+  - **Body**:
+    application/json
+    ```json
+      "course_subject": "string",
+      "course_name": "string"
+    ```
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 400 Bad Request
+    - 404 Not Found
+  - **Body**:
+    ```json
+      "id": int,
+      "course_subject": string,
+      "course_name": string
+    ```
+
+### DELETE "/courses/:id"
+- **Description**: Deletes a course by ID.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Params**:
+    - id: int
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 404 Not Found
+  - **Body**:
+    ```json
+      "message": "Course deleted successfully"
+    ```
+
+### POST "/courses/:id/join"
+- **Description**: Adds the user to the course.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Params**:
+    - id: int
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 400 Bad Request
+    - 404 Not Found
+  - **Body**:
+    ```json
+      "message": "User joined course successfully"
+    ```
+
+### POST "/courses/:id/leave"
+- **Description**: Removes the user from the course.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Params**:
+    - id: int
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 400 Bad Request
+    - 404 Not Found
+  - **Body**:
+    ```json
+      "message": "User left course successfully"
+    ```
+
+### GET "/posts"
+- **Description**: Returns a list of all posts.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+- **Response**:
+  - **Status**:
+    - 200 OK
+  - **Body**:
+    ```json
+    [
+      {
+        "id": int,
+        "sender_id": int,
+        "content": string,
+        "course_id": int,
+        "parentpost_id": int,
+        "votes": int,
+        "created_at": timestamp,
+        "updated_at": timestamp
+      }
+    ]
+    ```
+
+### GET "/posts/:id"
+- **Description**: Returns the details of a specific post by ID.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Params**:
+    - id: int
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 404 Not Found
+  - **Body**:
+    ```json
+    {
+      "id": int,
+      "sender_id": int,
+      "content": string,
+      "course_id": int,
+      "parentpost_id": int,
+      "votes": int,
+      "created_at": timestamp,
+      "updated_at": timestamp
     }
     ```
+
+### POST "/posts"
+- **Description**: Creates a new post
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Body**:
+    application/json
+    ```json
+    {
+      "content": "string",
+      "course_id": int,
+      "parentpost_id": int (optional) // 0 if root post
+    }
+    ```
+- **Response**:
+  - **Status**: 201 Created
+  - **Body**:
+    ```json
+    {
+      "id": int
+    }
+    ```
+
+### PUT "/posts/:id"
+- **Description**: Updates an existing post by ID.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Params**:
+    - id: int
+  - **Body**:
+    application/json
+    ```json
+    {
+      "content": "string"
+    }
+    ```
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 400 Bad Request
+    - 404 Not Found
+  - **Body**:
+    ```json
+    {
+      "id": int,
+      "sender_id": int,
+      "content": string,
+      "course_id": int,
+      "parentpost_id": int,
+      "votes": int,
+      "created_at": timestamp,
+      "updated_at": timestamp
+    }
+    ```
+
+### POST "/posts/:id/upvote"
+- **Description**: Upvotes a post by ID.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Params**:
+    - id: int
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 404 Not Found
+  - **Body**:
+    ```json
+    {
+      "id": int,
+      "sender_id": int,
+      "content": string,
+      "course_id": int,
+      "parentpost_id": int,
+      "votes": int,
+      "created_at": timestamp,
+      "updated_at": timestamp
+    }
+    ```
+
+### POST "/posts/:id/downvote"
+- **Description**: Downvotes a post by ID.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Params**:
+    - id: int
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 404 Not Found
+  - **Body**:
+    ```json
+    {
+      "id": int,
+      "sender_id": int,
+      "content": string,
+      "course_id": int,
+      "parentpost_id": int,
+      "votes": int,
+      "created_at": timestamp,
+      "updated_at": timestamp
+    }
+    ```
+
+### DELETE "/posts/:id"
+- **Description**: Deletes a post by ID.
+- **Request**:
+  - **Headers**:
+    - Authorization: Bearer "JWTToken"
+  - **Params**:
+    - id: int
+- **Response**:
+  - **Status**:
+    - 200 OK
+    - 404 Not Found

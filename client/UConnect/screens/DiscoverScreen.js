@@ -21,7 +21,8 @@ import {
   Modal,
   Portal,
 } from 'react-native-paper';
-import { fetchClassCommunity, createClassCommunity, joinClassCommunity } from '../services/courses.js';
+import { fetchClassCommunity, createClassCommunity } from '../services/courses.js';
+import { joinClassCommunity } from '../services/user2.js';
 
 export default function DiscoverScreen() {
   const { colors } = useTheme();
@@ -71,18 +72,18 @@ export default function DiscoverScreen() {
   };
 
   const handleJoin = async (classId, className) => {
-    // setJoiningClassId(classId);
-    // try {
-    //   await joinClassCommunity(classId);
+    setJoiningClassId(classId);
+    try {
+      await joinClassCommunity(classId);
       Alert.alert('Success', `You have joined ${className}!`);
       // Refresh the class list or update UI as needed
-    //   loadClasses();
-    // } catch (error) {
-    //   console.error("Error joining class:", error);
-    //   Alert.alert('Error', `Failed to join the class. ${error.message}`);
-    // } finally {
-    //   setJoiningClassId(null);
-    // }
+      loadClasses();
+    } catch (error) {
+      console.error("Error joining class:", error);
+      Alert.alert('Error', `Failed to join the class. ${error.message}`);
+    } finally {
+      setJoiningClassId(null);
+    }
   };
 
   const handleCreateClass = async () => {
