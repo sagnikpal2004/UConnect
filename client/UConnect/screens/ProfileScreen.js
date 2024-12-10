@@ -30,7 +30,7 @@ export default function ProfileScreen() {
     setError('');
     try {
       const token = await registerUser(username, email, password);
-      // await AsyncStorage.setItem('token', token);
+      await AsyncStorage.setItem('token', token);
       Alert.alert('Success', 'Registration successful!');
     } catch (err) {
       setError(err.message);
@@ -45,7 +45,7 @@ export default function ProfileScreen() {
     try {
       const token = await loginUser(email, password);
       // Save token
-      // await AsyncStorage.setItem('token', token);
+      await AsyncStorage.setItem('token', token);
       setIsAuthenticated(true);
       Alert.alert('Success', 'Login successful!');
       const decoded = jwtDecode(token);

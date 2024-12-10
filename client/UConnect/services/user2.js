@@ -1,17 +1,21 @@
 const url = "https://uconnect-backend.onrender.com:443/courses"; 
 const base_url = "https://uconnect-backend.onrender.com:443";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const joinClassCommunity = async (courseId) => {
     try {
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzMyMzg4OTUwfQ.uAQYZdZLmskRvV42C_Dv3ty509T5edV4FQUXpTB_EWk"    // TODO: Replace this with token from AsyncStorage
-        // const token = await AsyncStorage.getItem('token');
-        // if (!token)
-        //     throw new Error("No token found");
+        const token = await AsyncStorage.getItem('token');
+        if (!token)
+            throw new Error("No token found");
 
         const response = await fetch(`${url}/${courseId}/join`, {
+            method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`
             },
+            body: JSON.stringify({
+                courseId,
+            }),
         });
         if (!response.ok)
             throw new Error("Failed to join class community");
@@ -25,10 +29,9 @@ export const joinClassCommunity = async (courseId) => {
 
 export const fetchJoinedClasses = async () => {
     try {
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzMyMzg4OTUwfQ.uAQYZdZLmskRvV42C_Dv3ty509T5edV4FQUXpTB_EWk"    // TODO: Replace this with token from AsyncStorage
-        // const token = await AsyncStorage.getItem('token');
-        // if (!token)
-        //     throw new Error("No token found");
+        const token = await AsyncStorage.getItem('token');
+        if (!token)
+            throw new Error("No token found");
 
         const response = await fetch(`${base_url}/auth/`, {
             method: "GET",
