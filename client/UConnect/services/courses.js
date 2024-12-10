@@ -3,10 +3,10 @@ const url = "https://uconnect-backend.onrender.com:443/courses";
 
 export const fetchClassCommunity = async () => {
     try {
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzMyMzg4OTUwfQ.uAQYZdZLmskRvV42C_Dv3ty509T5edV4FQUXpTB_EWk"    // TODO: Replace this with token from AsyncStorage
-        // const token = await AsyncStorage.getItem('token');
-        // if (!token)
-        //     throw new Error("No token found");
+        // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzMyMzg4OTUwfQ.uAQYZdZLmskRvV42C_Dv3ty509T5edV4FQUXpTB_EWk"    // TODO: Replace this with token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+        if (!token)
+            throw new Error("No token found");
 
         const response = await fetch(`${url}`, {
             method: "GET",
@@ -28,10 +28,10 @@ export const fetchClassCommunity = async () => {
 
 export const fetchClassCommunityById = async (classId) => {
     try {
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzMyMzg4OTUwfQ.uAQYZdZLmskRvV42C_Dv3ty509T5edV4FQUXpTB_EWk"    // TODO: Replace this with token from AsyncStorage
-        // const token = await AsyncStorage.getItem('token');
-        // if (!token)
-        //     throw new Error("No token found");
+        // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzMyMzg4OTUwfQ.uAQYZdZLmskRvV42C_Dv3ty509T5edV4FQUXpTB_EWk"    // TODO: Replace this with token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+        if (!token)
+            throw new Error("No token found");
 
         const response = await fetch(`${url}/${classId}`, {
             method: "GET",
@@ -54,10 +54,10 @@ export const fetchClassCommunityById = async (classId) => {
 
 export const createClassCommunity = async (classData) => {
     try {
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzMyMzg4OTUwfQ.uAQYZdZLmskRvV42C_Dv3ty509T5edV4FQUXpTB_EWk"    // TODO: Replace this with token from AsyncStorage
-        // const token = await AsyncStorage.getItem('token');
-        // if (!token)
-        //     throw new Error("No token found");
+        // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzMyMzg4OTUwfQ.uAQYZdZLmskRvV42C_Dv3ty509T5edV4FQUXpTB_EWk"    // TODO: Replace this with token from AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+        if (!token)
+            throw new Error("No token found");
         
         const response = await fetch(`${url}/`, {
             method: "POST",
