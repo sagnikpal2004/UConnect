@@ -9,9 +9,13 @@ export const joinClassCommunity = async (courseId) => {
         //     throw new Error("No token found");
 
         const response = await fetch(`${url}/${courseId}/join`, {
+            method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`
             },
+            body: JSON.stringify({
+                courseId,
+            }),
         });
         if (!response.ok)
             throw new Error("Failed to join class community");
